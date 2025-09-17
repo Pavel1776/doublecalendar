@@ -71,7 +71,7 @@ h1 {
   font-family: Arial, sans-serif;
 }
 
-/* ✖ красный крестик с прозрачным фоном */
+/* ✖ красный крестик с прозрачным фоном
 .day.fail::after {
   content: "✖";
   color: white;
@@ -88,7 +88,20 @@ h1 {
   left: 0;
   pointer-events: none;
   font-family: Arial, sans-serif;
+} */
+ /* ✖ красный прозрачный крестик поверх числа */
+.day.fail::after {
+  content: "✖";
+  color: rgba(255, 0, 0, 0.6); /* красный полупрозрачный текст */
+  font-size: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-family: Arial, sans-serif;
 }
+
 
 .highlight {
   font-weight: bold;
