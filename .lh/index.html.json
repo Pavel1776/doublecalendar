@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 5,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1758096393335,
@@ -28,6 +28,10 @@
                 {
                     "date": 1758166518455,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,15 @@\n     <div class=\"calendar\">\n       <h2>Ложиться в <span class=\"highlight\">21:30</span></h2>\n       <div class=\"calendar-grid\" id=\"calendar2\"></div>\n     </div>\n+    <!-- Третий календарь -->\n+    <div class=\"calendar\">\n+      <h2>Не спать после обеда <span class=\"highlight\">21:30</span></h2>\n+      <div class=\"calendar-grid\" id=\"calendar3\"></div>\n+    </div>\n   </div>\n+  \n \n   <script src=\"script.js\"></script>\n </body>\n \n"
+                },
+                {
+                    "date": 1758167146505,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n       <div class=\"calendar-grid\" id=\"calendar2\"></div>\n     </div>\n     <!-- Третий календарь -->\n     <div class=\"calendar\">\n-      <h2>Не спать после обеда <span class=\"highlight\">21:30</span></h2>\n+      <h2>Не спать после обеда <span class=\"highlight\"></span></h2>\n       <div class=\"calendar-grid\" id=\"calendar3\"></div>\n     </div>\n   </div>\n   \n"
                 }
             ],
             "date": 1758096393335,
