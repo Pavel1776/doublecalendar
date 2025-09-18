@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 6,
+            "activePatchIndex": 13,
             "patches": [
                 {
                     "date": 1758096215850,
@@ -32,6 +32,34 @@
                 {
                     "date": 1758166591001,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,4 +46,5 @@\n \n // Отрисовать оба календаря (разные ключи в localStorage)\n renderCalendar(\"calendar1\", \"morningStatus\");\n renderCalendar(\"calendar2\", \"bedtimeStatus\");\n+renderCalendar(\"calendar3\", \"bedtimeStatus\");\n"
+                },
+                {
+                    "date": 1758169055624,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,29 +1,38 @@\n const daysInSeptember = 30;\n \n-/**\n- * Рисует календарь в контейнере containerId.\n- * Каждый день хранит статус в localStorage под ключом storageKey:\n- * объект { \"1\": \"success\", \"2\": \"fail\", ... }\n- */\n-function renderCalendar(containerId, storageKey) {\n-  const calendar = document.getElementById(containerId);\n-  if (!calendar) return;\n+// Список привычек (можешь добавлять сюда новые)\n+const habits = [\n+  { id: \"morning\", title: \"Подъём в 5:00\" },\n+  { id: \"bedtime\", title: \"Ложиться в 21:30\" },\n+  { id: \"noNap\", title: \"Не спать после обеда\" }\n+];\n \n-  // Загружаем статус (объект)\n+// Функция рендеринга календаря\n+function renderCalendar(containerId, storageKey, title) {\n+  const container = document.getElementById(containerId);\n+\n+  const calendarDiv = document.createElement(\"div\");\n+  calendarDiv.classList.add(\"calendar\");\n+\n+  const titleEl = document.createElement(\"h2\");\n+  titleEl.innerHTML = title;\n+  calendarDiv.appendChild(titleEl);\n+\n+  const grid = document.createElement(\"div\");\n+  grid.classList.add(\"calendar-grid\");\n+\n+  // Загружаем статус дней\n   let dayStatus = JSON.parse(localStorage.getItem(storageKey)) || {};\n \n-  // Отрисовываем дни\n   for (let i = 1; i <= daysInSeptember; i++) {\n     const day = document.createElement(\"div\");\n     day.classList.add(\"day\");\n     day.textContent = i;\n \n-    // Восстановить статус (если есть)\n     if (dayStatus[i] === \"success\") day.classList.add(\"success\");\n     if (dayStatus[i] === \"fail\") day.classList.add(\"fail\");\n \n-    // Клик: пусто -> success -> fail -> пусто\n     day.addEventListener(\"click\", () => {\n       if (day.classList.contains(\"success\")) {\n         day.classList.remove(\"success\");\n         day.classList.add(\"fail\");\n@@ -35,16 +44,19 @@\n         day.classList.add(\"success\");\n         dayStatus[i] = \"success\";\n       }\n \n-      // Сохраняем обновлённый объект в localStorage\n       localStorage.setItem(storageKey, JSON.stringify(dayStatus));\n     });\n \n-    calendar.appendChild(day);\n+    grid.appendChild(day);\n   }\n+\n+  calendarDiv.appendChild(grid);\n+  container.appendChild(calendarDiv);\n }\n \n-// Отрисовать оба календаря (разные ключи в localStorage)\n-renderCalendar(\"calendar1\", \"morningStatus\");\n-renderCalendar(\"calendar2\", \"bedtimeStatus\");\n-renderCalendar(\"calendar3\", \"bedtimeStatus\");\n+// Отрисовка всех календарей\n+const calendarsContainer = document.getElementById(\"calendars\");\n+habits.forEach(habit => {\n+  renderCalendar(\"calendars\", habit.id, habit.title);\n+});\n"
+                },
+                {
+                    "date": 1758170297873,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,30 +1,44 @@\n const daysInSeptember = 30;\n \n-// Список привычек (можешь добавлять сюда новые)\n+// ✅ Список привычек — только названия!\n const habits = [\n-  { id: \"morning\", title: \"Подъём в 5:00\" },\n-  { id: \"bedtime\", title: \"Ложиться в 21:30\" },\n-  { id: \"noNap\", title: \"Не спать после обеда\" }\n+  \"Подъём в 5:00\",\n+  \"Ложиться в 21:30\",\n+  \"Не спать после обеда\",\n+  \"Читать книгу 30 минут\"\n ];\n \n+// Функция для генерации ID на основе названия\n+function generateId(title) {\n+  return title.toLowerCase().replace(/\\s+/g, \"_\");\n+}\n+\n // Функция рендеринга календаря\n-function renderCalendar(containerId, storageKey, title) {\n-  const container = document.getElementById(containerId);\n+function renderCalendar(title) {\n+  const container = document.getElementById(\"calendars\");\n \n-  const calendarDiv = document.createElement(\"div\");\n-  calendarDiv.classList.add(\"calendar\");\n+  // создаём блок календаря\n+  const calendarWrapper = document.createElement(\"div\");\n+  calendarWrapper.classList.add(\"calendar\");\n \n-  const titleEl = document.createElement(\"h2\");\n-  titleEl.innerHTML = title;\n-  calendarDiv.appendChild(titleEl);\n+  // заголовок\n+  const h2 = document.createElement(\"h2\");\n+  h2.textContent = title;\n+  calendarWrapper.appendChild(h2);\n \n+  // сетка\n   const grid = document.createElement(\"div\");\n   grid.classList.add(\"calendar-grid\");\n+  calendarWrapper.appendChild(grid);\n \n-  // Загружаем статус дней\n+  container.appendChild(calendarWrapper);\n+\n+  // уникальный ключ для localStorage\n+  const storageKey = generateId(title);\n   let dayStatus = JSON.parse(localStorage.getItem(storageKey)) || {};\n \n+  // рендерим дни\n   for (let i = 1; i <= daysInSeptember; i++) {\n     const day = document.createElement(\"div\");\n     day.classList.add(\"day\");\n     day.textContent = i;\n@@ -49,14 +63,8 @@\n     });\n \n     grid.appendChild(day);\n   }\n-\n-  calendarDiv.appendChild(grid);\n-  container.appendChild(calendarDiv);\n }\n \n-// Отрисовка всех календарей\n-const calendarsContainer = document.getElementById(\"calendars\");\n-habits.forEach(habit => {\n-  renderCalendar(\"calendars\", habit.id, habit.title);\n-});\n+// Рендерим все календари из списка habits\n+habits.forEach(title => renderCalendar(title));\n"
+                },
+                {
+                    "date": 1758170377207,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n   \"Подъём в 5:00\",\n   \"Ложиться в 21:30\",\n   \"Не спать после обеда\",\n   \"Читать книгу 30 минут\"\n+  \"Читать книгу 30 минут\"\n ];\n \n // Функция для генерации ID на основе названия\n function generateId(title) {\n"
+                },
+                {
+                    "date": 1758170425927,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,10 @@\n const habits = [\n   \"Подъём в 5:00\",\n   \"Ложиться в 21:30\",\n   \"Не спать после обеда\",\n-  \"Читать книгу 30 минут\"\n-  \"Читать книгу 30 минут\"\n+  \"Читать книгу 30 минут\",\n+  \"не ковырятся  в носу\"\n ];\n \n // Функция для генерации ID на основе названия\n function generateId(title) {\n"
+                },
+                {
+                    "date": 1758170735775,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,9 @@\n const habits = [\n   \"Подъём в 5:00\",\n   \"Ложиться в 21:30\",\n   \"Не спать после обеда\",\n-  \"Читать книгу 30 минут\",\n-  \"не ковырятся  в носу\"\n+  \"Читать книгу 30 минут\"\n ];\n \n // Функция для генерации ID на основе названия\n function generateId(title) {\n"
+                },
+                {
+                    "date": 1758170798816,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,10 @@\n const habits = [\n   \"Подъём в 5:00\",\n   \"Ложиться в 21:30\",\n   \"Не спать после обеда\",\n-  \"Читать книгу 30 минут\"\n+  \"Читать книгу 30 минут\",\n+  \"не ковыряться в носу\"\n ];\n \n // Функция для генерации ID на основе названия\n function generateId(title) {\n"
+                },
+                {
+                    "date": 1758170826919,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,9 @@\n const habits = [\n   \"Подъём в 5:00\",\n   \"Ложиться в 21:30\",\n   \"Не спать после обеда\",\n-  \"Читать книгу 30 минут\",\n-  \"не ковыряться в носу\"\n+  \"Читать книгу 30 минут\"\n ];\n \n // Функция для генерации ID на основе названия\n function generateId(title) {\n"
                 }
             ],
             "date": 1758096215850,
