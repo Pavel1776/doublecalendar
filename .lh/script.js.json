@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 5,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1758096215850,
@@ -28,6 +28,10 @@
                 {
                     "date": 1758122091213,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,40 +1,49 @@\n const daysInSeptember = 30;\n \n-// Отдельные массивы для каждого календаря\n-let crossedDays1 = JSON.parse(localStorage.getItem(\"crossedDays1\")) || [];\n-let crossedDays2 = JSON.parse(localStorage.getItem(\"crossedDays2\")) || [];\n-\n-// Функция для отрисовки календаря\n-function renderCalendar(containerId, crossedDays, storageKey, crossClass) {\n+/**\n+ * Рисует календарь в контейнере containerId.\n+ * Каждый день хранит статус в localStorage под ключом storageKey:\n+ * объект { \"1\": \"success\", \"2\": \"fail\", ... }\n+ */\n+function renderCalendar(containerId, storageKey) {\n   const calendar = document.getElementById(containerId);\n+  if (!calendar) return;\n \n+  // Загружаем статус (объект)\n+  let dayStatus = JSON.parse(localStorage.getItem(storageKey)) || {};\n+\n+  // Отрисовываем дни\n   for (let i = 1; i <= daysInSeptember; i++) {\n     const day = document.createElement(\"div\");\n     day.classList.add(\"day\");\n     day.textContent = i;\n \n-    if (crossedDays.includes(i)) {\n-      day.classList.add(crossClass);\n-    }\n+    // Восстановить статус (если есть)\n+    if (dayStatus[i] === \"success\") day.classList.add(\"success\");\n+    if (dayStatus[i] === \"fail\") day.classList.add(\"fail\");\n \n+    // Клик: пусто -> success -> fail -> пусто\n     day.addEventListener(\"click\", () => {\n-      day.classList.toggle(crossClass);\n-\n-      if (day.classList.contains(crossClass)) {\n-        crossedDays.push(i);\n+      if (day.classList.contains(\"success\")) {\n+        day.classList.remove(\"success\");\n+        day.classList.add(\"fail\");\n+        dayStatus[i] = \"fail\";\n+      } else if (day.classList.contains(\"fail\")) {\n+        day.classList.remove(\"fail\");\n+        delete dayStatus[i];\n       } else {\n-        crossedDays = crossedDays.filter(d => d !== i);\n+        day.classList.add(\"success\");\n+        dayStatus[i] = \"success\";\n       }\n \n-      localStorage.setItem(storageKey, JSON.stringify(crossedDays));\n+      // Сохраняем обновлённый объект в localStorage\n+      localStorage.setItem(storageKey, JSON.stringify(dayStatus));\n     });\n \n     calendar.appendChild(day);\n   }\n }\n \n-// Первый календарь (крестики)\n-renderCalendar(\"calendar1\", crossedDays1, \"crossedDays1\", \"crossed\");\n-\n-// Второй календарь (галочки)\n-renderCalendar(\"calendar2\", crossedDays2, \"crossedDays2\", \"success\");\n+// Отрисовать оба календаря (разные ключи в localStorage)\n+renderCalendar(\"calendar1\", \"morningStatus\");\n+renderCalendar(\"calendar2\", \"bedtimeStatus\");\n"
+                },
+                {
+                    "date": 1758166591001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,4 +46,5 @@\n \n // Отрисовать оба календаря (разные ключи в localStorage)\n renderCalendar(\"calendar1\", \"morningStatus\");\n renderCalendar(\"calendar2\", \"bedtimeStatus\");\n+renderCalendar(\"calendar3\", \"bedtimeStatus\");\n"
                 }
             ],
             "date": 1758096215850,

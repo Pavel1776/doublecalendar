@@ -47,3 +47,4 @@ function renderCalendar(containerId, storageKey) {
 // Отрисовать оба календаря (разные ключи в localStorage)
 renderCalendar("calendar1", "morningStatus");
 renderCalendar("calendar2", "bedtimeStatus");
+renderCalendar("calendar3", "bedtimeStatus");

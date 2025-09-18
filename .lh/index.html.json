@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 4,
+            "activePatchIndex": 5,
             "patches": [
                 {
                     "date": 1758096393335,
@@ -24,6 +24,10 @@
                 {
                     "date": 1758122069412,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n <!DOCTYPE html>\n <html lang=\"ru\">\n \n <head>\n-  <meta charset=\"UTF-8\">\n-  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n-  <link href=\"style.css\" rel=\"stylesheet\">\n+  <meta charset=\"UTF-8\" />\n+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n+  <link href=\"style.css\" rel=\"stylesheet\" />\n   <title>Календари привычек</title>\n </head>\n \n <body>\n"
+                },
+                {
+                    "date": 1758166518455,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,15 @@\n     <div class=\"calendar\">\n       <h2>Ложиться в <span class=\"highlight\">21:30</span></h2>\n       <div class=\"calendar-grid\" id=\"calendar2\"></div>\n     </div>\n+    <!-- Третий календарь -->\n+    <div class=\"calendar\">\n+      <h2>Не спать после обеда <span class=\"highlight\">21:30</span></h2>\n+      <div class=\"calendar-grid\" id=\"calendar3\"></div>\n+    </div>\n   </div>\n+  \n \n   <script src=\"script.js\"></script>\n </body>\n \n"
                 }
             ],
             "date": 1758096393335,
